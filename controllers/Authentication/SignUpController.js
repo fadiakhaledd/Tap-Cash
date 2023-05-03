@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { get_info, validateNID } from "./NIDValidation.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
@@ -11,38 +12,43 @@ const hashPassword = async function (password) {
     return hashedPassword;
 };
 
-const jwtExpirySeconds = 1 * 24 * 60 * 60; //jwt expires after one day
+
 const createJWT = (id) => {
+    const jwtExpirySeconds = 20 * 60; //jwt expires after 20 minutes
     return jwt.sign({ id }, process.env.JWT_KEY, {
         expiresIn: jwtExpirySeconds,
     });
 };
 
-export const signUp = async (req, res, next) => {
+export async function signUp(req, res, next) {
     try {
-        console.log(req.body)
-        const existingPhone = await prisma.user.findUnique({
-            where: { phone: req.body.phone },
-        });
 
-        const existingUsername = await prisma.user.findUnique({
-            where: { username: req.body.username },
-        });
-
-        if (!existingPhone && !existingUsername) {
-            let userData = req.body;
-            const hashedPassword = await hashPassword(userData.password);
-            userData.password = hashedPassword;
-            userData.balance = 0;
-
-            const user = await prisma.user.create({
-                data: userData,
+        if (validateNID(req.body.nationalID)) {
+            const existingPhone = await prisma.user.findUnique({
+                where: { phone: req.body.phone },
             });
-            const token = createJWT(user.id);
-            res.status(201).json({ user: user, token: token });
-        } else {
 
-            res.status(406).json({ message: "User already exists" });
+            const existingUsername = await prisma.user.findUnique({
+                where: { username: req.body.username },
+            });
+
+            if (!existingPhone && !existingUsername) {
+                let userData = req.body;
+                const hashedPassword = await hashPassword(userData.password);
+                userData.password = hashedPassword;
+                userData.balance = 0;
+
+                const user = await prisma.user.create({
+                    data: userData,
+                });
+                const token = createJWT(user.id);
+                res.status(201).json({ user: user, token: token });
+            } else {
+
+                res.status(406).json({ message: "User already exists" });
+            }
+        } else {
+            res.status(400).json({ message: "National ID is not valid" });
         }
 
     } catch (error) {
