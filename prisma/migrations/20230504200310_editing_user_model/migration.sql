@@ -1,11 +1,12 @@
 -- CreateTable
 CREATE TABLE "User" (
     "UID" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "phone" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
-    "nationalID" TEXT NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "phone" VARCHAR(11) NOT NULL,
+    "password" VARCHAR(50) NOT NULL,
+    "username" VARCHAR(20) NOT NULL,
+    "email" VARCHAR(50) NOT NULL,
+    "nationalID" VARCHAR(14) NOT NULL,
     "nationalIdFileName" TEXT NOT NULL,
     "balance" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "profilePicture" TEXT,

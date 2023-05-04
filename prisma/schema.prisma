@@ -12,11 +12,12 @@ datasource db {
 
 model User {
   UID                String @id @default(uuid())
-  name               String
-  phone              String @unique
+  name               String @db.VarChar(50)
+  phone              String @unique @db.VarChar(20)
   password           String
-  username           String @unique
-  nationalID         String
+  username           String @unique @db.VarChar(20)
+  email              String @db.VarChar(50)
+  nationalID         String @db.VarChar(15)
   nationalIdFileName String
 
   balance        Float   @default(0)
