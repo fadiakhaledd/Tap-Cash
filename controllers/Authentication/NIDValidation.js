@@ -31,7 +31,6 @@ const GOVERNORATES_CODES_MAP = {
 
 
 export function validateNID(NID) {
-
     if (!/^\d{14}$/.test(NID)) {
         return false;
     }
@@ -46,12 +45,11 @@ export function validateNID(NID) {
 
     let current_datetime = new Date();
 
-    let centuryCheck = (century == 2 || century == 3)
+    let centuryCheck = (century === 2 || century === 3)
 
     let yearCheck = (century === 3) ? (year <= current_datetime.getFullYear() - 2000) : true;
 
     let monthCheck = (month >= 1 && month <= 12);
-
 
     let dayCheck;
     if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
@@ -69,26 +67,47 @@ export function validateNID(NID) {
     }
 
     let governorateCheck = governorate in GOVERNORATES_CODES_MAP;
-    if (centuryCheck && yearCheck && monthCheck && dayCheck && governorateCheck) return true
-    else return false;
+    let verificationDigitCheck = calculateVerificationDigit(NID.slice(0, 13)) === verification_digit;
 
+    if (centuryCheck && yearCheck && monthCheck && dayCheck && governorateCheck && verificationDigitCheck) {
+        console.log(get_info(century,year,month,day,governorate,unique_num))
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
-export function get_info(NID) {
-    if (validateNID(NID)) {
+function calculateVerificationDigit(nationalID) {
+
+    let digits = nationalID.split("").map(Number);
+
+    let factors = [2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+    let products = digits.map((digit, i) => digit * factors[i]);
+
+    let sum = products.reduce((acc, product) => acc + product, 0);
+
+    let remainder = sum % 11;
+
+    let verificationDigit;
+    if (remainder === 10) {
+        verificationDigit = 0;
+    } else if (remainder === 0) {
+        verificationDigit = 1;
+    } else {
+        verificationDigit = 11 - remainder;
+    }
+
+    return verificationDigit;
+}
+
+export function get_info(century, year, month, day, governorate, unique_num) {
+
         let id_owner_data = {};
-
-
         id_owner_data["year_of_birth"] = (century === 3) ? `20${year}` : `19${year}`;
         id_owner_data["month_of_birth"] = `${month}`;
         id_owner_data["day_of_birth"] = `${day}`;
         id_owner_data["governorate"] = GOVERNORATES_CODES_MAP[governorate];
         id_owner_data["type"] = (unique_num % 2 !== 0) ? "Male" : "Female";
         return [true, id_owner_data];
-    } else {
-        let number_error_msg = `Invalid national ID number: ${NID}. Please enter the correct one`;
-        return [false, { "error": number_error_msg }];
-    }
-
 }
