@@ -57,7 +57,7 @@ export async function signUp(req, res, next) {
             } else {
                 fs.unlinkSync(path);
                 if (existingPhone) return res.status(406).json({ message: "phone number already exists" })
-                if (existingUsername) return res.status(406).json({ message: "usrname already exists" })
+                if (existingUsername) return res.status(406).json({ message: "username already exists" })
             }
         } else {
             fs.unlinkSync(path);

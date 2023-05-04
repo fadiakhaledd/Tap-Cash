@@ -8,7 +8,7 @@ const AuthRouter = Router();
 
 const storageEngine = multer.diskStorage({
     destination: (req, file, cb) => {
-        if (file.fieldname == "image") {
+        if (file.fieldname === "image") {
             cb(null, './uploads/NationalIDs');
         }
     },
