@@ -27,7 +27,9 @@ export async function signUp(req, res, next) {
         if (req.fileError) {
             return res.status(400).json({ message: req.fileError });
         }
+
         let path = `uploads/NationalIDs/${req.files.image[0].filename}`;
+        console.log(path)
 
         console.log(req.body)
         if (validateNID(req.body.nationalID)) {
