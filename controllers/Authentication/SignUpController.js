@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { get_info, validateNID } from "./NIDValidation.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import fs from 'fs';
 
 const prisma = new PrismaClient();
 
@@ -21,8 +22,14 @@ const createJWT = (id) => {
 };
 
 export async function signUp(req, res, next) {
-    try {
 
+    try {
+        if (req.fileError) {
+            return res.status(400).json({ message: req.fileError });
+        }
+        let path = `uploads/NationalIDs/${req.files.image[0].filename}`;
+
+        console.log(req.body)
         if (validateNID(req.body.nationalID)) {
             const existingPhone = await prisma.user.findUnique({
                 where: { phone: req.body.phone },
@@ -37,23 +44,28 @@ export async function signUp(req, res, next) {
                 const hashedPassword = await hashPassword(userData.password);
                 userData.password = hashedPassword;
                 userData.balance = 0;
+                userData.nationalIdFileName = req.files.image[0].filename
+
 
                 const user = await prisma.user.create({
                     data: userData,
                 });
                 const token = createJWT(user.id);
-                res.status(201).json({ user: user, token: token });
+                return res.status(201).json({ user: user, token: token });
             } else {
-
-                res.status(406).json({ message: "User already exists" });
+                fs.unlinkSync(path);
+                if (existingPhone) return res.status(406).json({ message: "phone number already exists" })
+                if (existingUsername) return res.status(406).json({ message: "usrname already exists" })
             }
         } else {
-            res.status(400).json({ message: "National ID is not valid" });
+            fs.unlinkSync(path);
+            return res.status(400).json({ message: "National ID is not valid" });
         }
 
     } catch (error) {
+        fs.unlinkSync(path);
+
         res.status(400).json(error.message);
         next(error);
     }
 }
-

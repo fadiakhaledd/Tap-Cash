@@ -1,11 +1,40 @@
 import { Router } from "express";
+import multer from 'multer';
+import path from 'path'
 import * as AuthenticationService from "../controllers/Authentication/exports.js"
 
-import { join } from "path";
 
 const AuthRouter = Router();
 
-AuthRouter.post('/register', AuthenticationService.signUp);
+const storageEngine = multer.diskStorage({
+    destination: (req, file, cb) => {
+        if (file.fieldname == "image") {
+            cb(null, path.join(process.cwd(), 'uploads/NationalIDs'));
+        }
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storageEngine,
+    fileFilter: (req, file, cb) => {
+        if (
+            file.mimetype === "image/jpeg" ||
+            file.mimetype === "image/jpg" ||
+            file.mimetype === "image/png"
+        ) {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            req.fileError = "Only .jpeg, .jpg, .png format allowed!";
+        }
+    },
+});
+
+AuthRouter.post("/register", upload.fields([{ name: "image" }]), AuthenticationService.signUp);
+
 AuthRouter.post('/login', AuthenticationService.login);
 
 export default AuthRouter; 
