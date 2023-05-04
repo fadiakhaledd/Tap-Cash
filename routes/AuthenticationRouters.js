@@ -9,7 +9,7 @@ const AuthRouter = Router();
 const storageEngine = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname == "image") {
-            cb(null, path.join(process.cwd(), 'uploads/NationalIDs'));
+            cb(null, './uploads/NationalIDs');
         }
     },
     filename: (req, file, cb) => {

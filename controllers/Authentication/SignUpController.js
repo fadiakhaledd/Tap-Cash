@@ -31,7 +31,7 @@ export async function signUp(req, res, next) {
         let path = `uploads/NationalIDs/${req.files.image[0].filename}`;
         console.log(path)
 
-        console.log(req.body)
+        //console.log(req.body)
         if (validateNID(req.body.nationalID)) {
             const existingPhone = await prisma.user.findUnique({
                 where: { phone: req.body.phone },
