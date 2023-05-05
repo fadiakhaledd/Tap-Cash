@@ -2,11 +2,11 @@
 CREATE TABLE "User" (
     "UID" TEXT NOT NULL,
     "name" VARCHAR(50) NOT NULL,
-    "phone" VARCHAR(11) NOT NULL,
-    "password" VARCHAR(50) NOT NULL,
+    "phone" VARCHAR(20) NOT NULL,
+    "password" TEXT NOT NULL,
     "username" VARCHAR(20) NOT NULL,
     "email" VARCHAR(50) NOT NULL,
-    "nationalID" VARCHAR(14) NOT NULL,
+    "nationalID" VARCHAR(15) NOT NULL,
     "nationalIdFileName" TEXT NOT NULL,
     "balance" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "profilePicture" TEXT,
@@ -21,3 +21,6 @@ CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_nationalID_key" ON "User"("nationalID");

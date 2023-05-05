@@ -17,7 +17,7 @@ model User {
   password           String
   username           String @unique @db.VarChar(20)
   email              String @db.VarChar(50)
-  nationalID         String @db.VarChar(15)
+  nationalID         String @unique @db.VarChar(15)
   nationalIdFileName String
 
   balance        Float   @default(0)

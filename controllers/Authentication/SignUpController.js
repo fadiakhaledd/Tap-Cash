@@ -22,43 +22,65 @@ const createJWT = (id) => {
 };
 
 export async function signUp(req, res, next) {
+
     let path;
 
     try {
+
+        // checking if the request contains files and images
         if (!req.files || !req.files.image || req.fileError) {
             return res.status(400).json({ message: "Invalid file upload" });
         }
+
+        // the path to the last saved image
         path = `uploads/NationalIDs/${req.files.image[0].filename}`;
 
+        // check if the national ID is registered before
+        const existingNationalID = await prisma.user.findUnique({
+            where: { nationalID: req.body.nationalID },
+        });
 
-        //console.log(req.body)
+        if (existingNationalID) {
+            fs.unlinkSync(path);
+            return res.status(406).json({ message: "National ID already registered" })
+        }
+
+        // check if the phone number is registered before
+        const existingPhone = await prisma.user.findUnique({
+            where: { phone: req.body.phone },
+        });
+
+        if (existingPhone) {
+            fs.unlinkSync(path);
+            return res.status(406).json({ message: "Phone number already registered" })
+        }
+
+
+        // check if the username is registered before
+        const existingUsername = await prisma.user.findUnique({
+            where: { username: req.body.username },
+        });
+        if (existingUsername) {
+            fs.unlinkSync(path);
+            return res.status(406).json({ message: "Username already registered" })
+        }
+
+        // validate the entered national id if all the previous checks passed 
         if (validateNID(req.body.nationalID)) {
-            const existingPhone = await prisma.user.findUnique({
-                where: { phone: req.body.phone },
+
+            let userData = req.body;
+            const hashedPassword = await hashPassword(userData.password);
+            userData.password = hashedPassword;
+            userData.balance = 0;
+            userData.nationalIdFileName = req.files.image[0].filename
+
+            const user = await prisma.user.create({
+                data: userData,
             });
 
-            const existingUsername = await prisma.user.findUnique({
-                where: { username: req.body.username },
-            });
+            const token = createJWT(user.id);
 
-            if (!existingPhone && !existingUsername) {
-                let userData = req.body;
-                const hashedPassword = await hashPassword(userData.password);
-                userData.password = hashedPassword;
-                userData.balance = 0;
-                userData.nationalIdFileName = req.files.image[0].filename
-
-
-                const user = await prisma.user.create({
-                    data: userData,
-                });
-                const token = createJWT(user.id);
-                return res.status(201).json({ user: user, token: token });
-            } else {
-                fs.unlinkSync(path);
-                if (existingPhone) return res.status(406).json({ message: "phone number already exists" })
-                if (existingUsername) return res.status(406).json({ message: "username already exists" })
-            }
+            return res.status(201).json({ user: user, token: token });
         } else {
             fs.unlinkSync(path);
             return res.status(400).json({ message: "National ID is not valid" });
@@ -66,7 +88,6 @@ export async function signUp(req, res, next) {
 
     } catch (error) {
         fs.unlinkSync(path);
-
         res.status(400).json(error.message);
         next(error);
     }
