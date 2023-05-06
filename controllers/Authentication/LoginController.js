@@ -6,8 +6,9 @@ const prisma = new PrismaClient();
 export const login = async (req, res, next) => {
     try {
         const user = await checkUser(req.body.phone, req.body.password);
-        const token = createJWT(user.id);
-        res.status(200).json({ token });
+        const token = createJWT(user.UID);
+        return res.status(200).json({ userID: user.UID, token: token });
+
     } catch (error) {
         //const errors = handleErrors(error);
         res.status(401).json(error.message);
@@ -15,14 +16,12 @@ export const login = async (req, res, next) => {
     }
 };
 
-
 const checkUser = async function (phone, password) {
     const user = await prisma.user.findUnique({
         where: { phone: phone },
     });
     if (user) {
         const auth = await bcrypt.compare(password, user.password);
-        console.log(password, user.password)
         if (auth) {
             return user;
         } else {
