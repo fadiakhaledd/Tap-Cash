@@ -1,13 +1,15 @@
 -- CreateTable
 CREATE TABLE "User" (
     "UID" TEXT NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
+    "firstName" VARCHAR(50) NOT NULL,
+    "LastName" VARCHAR(50) NOT NULL,
     "phone" VARCHAR(20) NOT NULL,
     "password" TEXT NOT NULL,
     "username" VARCHAR(20) NOT NULL,
     "email" VARCHAR(50) NOT NULL,
     "nationalID" VARCHAR(15) NOT NULL,
     "nationalIdFileName" TEXT NOT NULL,
+    "birthdate" TIMESTAMP(3) NOT NULL,
     "balance" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "profilePicture" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

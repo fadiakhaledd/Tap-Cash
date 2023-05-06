@@ -11,14 +11,16 @@ datasource db {
 }
 
 model User {
-  UID                String @id @default(uuid())
-  name               String @db.VarChar(50)
-  phone              String @unique @db.VarChar(20)
+  UID                String   @id @default(uuid())
+  firstName          String   @db.VarChar(50)
+  LastName           String   @db.VarChar(50)
+  phone              String   @unique @db.VarChar(20)
   password           String
-  username           String @unique @db.VarChar(20)
-  email              String @db.VarChar(50)
-  nationalID         String @unique @db.VarChar(15)
+  username           String   @unique @db.VarChar(20)
+  email              String   @db.VarChar(50)
+  nationalID         String   @unique @db.VarChar(15)
   nationalIdFileName String
+  birthdate          DateTime
 
   balance        Float   @default(0)
   profilePicture String?

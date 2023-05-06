@@ -74,6 +74,11 @@ export async function signUp(req, res, next) {
             userData.balance = 0;
             userData.nationalIdFileName = req.files.image[0].filename
 
+            const dateObject = new Date(req.body.birthdate);
+            dateObject.setHours(0, 0, 0, 0); // set time component to midnight
+            userData.birthdate = dateObject;
+
+
             const user = await prisma.user.create({
                 data: userData,
             });
