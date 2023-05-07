@@ -7,6 +7,24 @@ export class UserRepository {
     async findUserByID(UID) {
         return this.prisma.user.findUnique({
             where: { UID: UID },
+            select: {
+                UID: true,
+                firstName: true,
+                LastName: true,
+                phone: true,
+                email: true,
+                username: true,
+                birthdate: true,
+                balance: true,
+                nationalID: true,
+                nationalIdFileName: true,
+                sentTransactions: true,
+                receivedTransactions: true,
+                sentTransactionRequests: true,
+                receivedTransactionRequests: true,
+                password: false
+
+            }
         });
     }
 
