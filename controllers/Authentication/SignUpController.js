@@ -69,10 +69,14 @@ export async function signUp(req, res, next) {
         if (validateNID(req.body.nationalID)) {
 
             let userData = req.body;
+
+            // hashing the password 
             const hashedPassword = await hashPassword(userData.password);
             userData.password = hashedPassword;
+
+            // setting values to fields 
             userData.balance = 0;
-            userData.nationalIdFileName = req.files.image[0].filename
+            userData.nationalIdFileName = path // path to the photo on server
 
             const dateObject = new Date(req.body.birthdate);
             dateObject.setHours(0, 0, 0, 0); // set time component to midnight
