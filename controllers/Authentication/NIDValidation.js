@@ -70,7 +70,7 @@ export function validateNID(NID) {
     let verificationDigitCheck = calculateVerificationDigit(NID.slice(0, 13)) === verification_digit;
 
     if (centuryCheck && yearCheck && monthCheck && dayCheck && governorateCheck && verificationDigitCheck) {
-        console.log(get_info(century,year,month,day,governorate,unique_num))
+        //console.log(get_info(century,year,month,day,governorate,unique_num))
         return true;
     } else {
         return false;
@@ -103,11 +103,11 @@ function calculateVerificationDigit(nationalID) {
 
 export function get_info(century, year, month, day, governorate, unique_num) {
 
-        let id_owner_data = {};
-        id_owner_data["year_of_birth"] = (century === 3) ? `20${year}` : `19${year}`;
-        id_owner_data["month_of_birth"] = `${month}`;
-        id_owner_data["day_of_birth"] = `${day}`;
-        id_owner_data["governorate"] = GOVERNORATES_CODES_MAP[governorate];
-        id_owner_data["type"] = (unique_num % 2 !== 0) ? "Male" : "Female";
-        return [true, id_owner_data];
+    let id_owner_data = {};
+    id_owner_data["year_of_birth"] = (century === 3) ? `20${year}` : `19${year}`;
+    id_owner_data["month_of_birth"] = `${month}`;
+    id_owner_data["day_of_birth"] = `${day}`;
+    id_owner_data["governorate"] = GOVERNORATES_CODES_MAP[governorate];
+    id_owner_data["type"] = (unique_num % 2 !== 0) ? "Male" : "Female";
+    return [true, id_owner_data];
 }

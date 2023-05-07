@@ -21,6 +21,10 @@ export async function getUserById(req, res) {
                 balance: true,
                 nationalID: true,
                 nationalIdFileName: true,
+                sentTransactions: true,
+                receivedTransactions: true,
+                sentTransactionRequests: true,
+                receivedTransactionRequests: true,
                 password: false
 
 
