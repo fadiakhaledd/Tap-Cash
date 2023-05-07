@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Define the User model
 model User {
   UID                String   @id @default(uuid())
   firstName          String   @db.VarChar(50)
@@ -27,4 +28,62 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Define the sentTransactions field as a relation to the Transaction model
+  sentTransactions Transaction[] @relation("sender_transactions")
+
+  // Define the receivedTransactions field as a relation to the Transaction model
+  receivedTransactions Transaction[] @relation("recipient_transactions")
+
+  // Define the sentTransactionRequests field as a relation to the TransactionRequest model (requests done by this user)
+  sentTransactionRequests TransactionRequest[] @relation("requester_transaction_requests")
+
+  // Define the receivedTransactionRequests field as a relation to the TransactionRequest model (requests sent to this user)
+  receivedTransactionRequests TransactionRequest[] @relation("recipient_transaction_requests")
+}
+
+// Define the Transaction model (send/receive money between users)
+model Transaction {
+  id           Int               @id @default(autoincrement())
+  sender_id    String
+  recipient_id String
+  amount       Float
+  status       TransactionStatus
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Define the sender and recipient fields as references to the User model
+  sender    User @relation("sender_transactions", fields: [sender_id], references: [UID])
+  recipient User @relation("recipient_transactions", fields: [recipient_id], references: [UID])
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+// Define the TransactionRequest model to be used in requesting money
+model TransactionRequest {
+  id           Int                      @id @default(autoincrement())
+  requester_id String
+  recipient_id String
+  amount       Float
+  status       TransactionRequestStatus
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Define the requester and recipient fields as references to the User model
+  requester User @relation("requester_transaction_requests", fields: [requester_id], references: [UID])
+  recipient User @relation("recipient_transaction_requests", fields: [recipient_id], references: [UID])
+}
+
+enum TransactionRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
 }
