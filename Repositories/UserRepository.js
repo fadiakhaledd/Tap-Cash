@@ -49,8 +49,8 @@ export class UserRepository {
 
     async updateBalance(UID, balance) {
         return this.prisma.user.update({
-            where: { UID },
-            data: { balance },
+            where: { UID: UID },
+            data: { balance: balance },
         });
     }
 

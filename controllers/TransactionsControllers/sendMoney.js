@@ -13,10 +13,12 @@ async function sendMoney(sender, recipient, amount) {
     }
 
     // Deduct the amount from the sender's balance
-    await userRepository.updateBalance(sender.UID, sender.balance - amount)
+    let newSenderBalance = sender.balance - amount;
+    await userRepository.updateBalance(sender.UID, newSenderBalance)
 
     // Add the amount to the recipient's balance
-    await userRepository.updateBalance(recipient.UID, sender.balance + amount)
+    let newRecipientBalance = sender.balance + amount;
+    await userRepository.updateBalance(recipient.UID, newRecipientBalance)
 
     // Create a new transaction record in the database
     const transaction = await prisma.transaction.create({
