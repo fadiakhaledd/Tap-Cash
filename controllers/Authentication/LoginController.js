@@ -2,12 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
+import { UserRepository } from '../../Repositories/UserRepository.js'
+
+let prisma = new PrismaClient()
+const userRepository = new UserRepository(prisma);
 export const login = async (req, res, next) => {
     try {
-        const user = await prisma.user.findUnique({
-            where: { phone: req.body.phone },
-        });
+
+        const user = await userRepository.findUserByPhone(req.body.phone);
 
         if (user) {
             const auth = await bcrypt.compare(req.body.password, user.password);

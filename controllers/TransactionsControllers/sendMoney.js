@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import { UserRepository } from '../../Repositories/UserRepository.js'
 
-const prisma = new PrismaClient()
+let prisma = new PrismaClient()
+const userRepository = new UserRepository(prisma);
 
 // the function that performs the logic for sending money
 async function sendMoney(sender, recipient, amount) {
@@ -11,16 +13,10 @@ async function sendMoney(sender, recipient, amount) {
     }
 
     // Deduct the amount from the sender's balance
-    await prisma.user.update({
-        where: { UID: sender.UID },
-        data: { balance: sender.balance - amount },
-    });
+    await userRepository.updateBalance(sender.UID, sender.balance - amount)
 
     // Add the amount to the recipient's balance
-    await prisma.user.update({
-        where: { UID: recipient.UID },
-        data: { balance: recipient.balance + amount },
-    });
+    await userRepository.updateBalance(recipient.UID, sender.balance + amount)
 
     // Create a new transaction record in the database
     const transaction = await prisma.transaction.create({
@@ -43,13 +39,10 @@ export async function sendMoneyByUsername(req, res) {
         const { senderId, recipientUsername, amount } = req.body;
 
         // Retrieve sender and recipient users from the database
-        const sender = await prisma.user.findUnique({
-            where: { UID: senderId },
-        });
+        const sender = await userRepository.findUserByID(senderId);
+        const recipient = await userRepository.findUserByUsername(recipientUsername);
+        console.log(sender)
 
-        const recipient = await prisma.user.findUnique({
-            where: { username: recipientUsername },
-        });
 
         if (!sender) throw new Error('Sender ID is incorrect');
         if (!recipient) throw new Error('Recipient username is not registered');
@@ -68,17 +61,13 @@ export async function sendMoneyByPhoneNumber(req, res) {
         const { senderId, recipientPhone, amount } = req.body;
 
         // Retrieve sender and recipient users from the database
-        const sender = await prisma.user.findUnique({
-            where: { UID: senderId },
-        });
-        const recipient = await prisma.user.findUnique({
-            where: { phone: recipientPhone },
-        });
+        const sender = await userRepository.findUserByID(senderId);
+        const recipient = await userRepository.findUserByPhone(recipientPhone);
+
 
         if (!sender) throw new Error('Sender ID is incorrect');
         if (!recipient) throw new Error('Recipient phone number is not registered');
         if (sender === recipient) throw new Error('sender and recipient are the same user')
-
 
         const result = await sendMoney(sender, recipient, amount);
 
