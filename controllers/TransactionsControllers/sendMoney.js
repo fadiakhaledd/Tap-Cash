@@ -1,8 +1,35 @@
 import { PrismaClient } from "@prisma/client";
 import { UserRepository } from '../../Repositories/UserRepository.js'
+import { TransactionRepository } from '../../Repositories/TransactionRepository.js'
 
 let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);
+const transactionRepository = new TransactionRepository(prisma);
+
+
+
+async function returnMoney(sender, recipient, amount) {
+    // Deduct the amount from the sender's balance
+    let newSenderBalance = sender.balance + amount;
+    await userRepository.updateBalance(sender.UID, newSenderBalance)
+
+    // Add the amount to the recipient's balance
+    let newRecipientBalance = sender.balance - amount;
+    await userRepository.updateBalance(recipient.UID, newRecipientBalance)
+
+
+    // Create a new transaction record in the database
+    let transactionData = {
+        sender_id: sender.UID,
+        recipient_id: recipient.UID,
+        amount: amount,
+        status: "FAILED",
+    }
+
+    const transaction = transactionRepository.createTransaction(transactionData)
+
+    return { transaction };
+}
 
 // the function that performs the logic for sending money
 async function sendMoney(sender, recipient, amount) {
@@ -21,14 +48,14 @@ async function sendMoney(sender, recipient, amount) {
     await userRepository.updateBalance(recipient.UID, newRecipientBalance)
 
     // Create a new transaction record in the database
-    const transaction = await prisma.transaction.create({
-        data: {
-            sender_id: sender.UID,
-            recipient_id: recipient.UID,
-            amount: amount,
-            status: "COMPLETED",
-        },
-    });
+    let transactionData = {
+        sender_id: sender.UID,
+        recipient_id: recipient.UID,
+        amount: amount,
+        status: "COMPLETED",
+    }
+
+    const transaction = transactionRepository.createTransaction(transactionData)
 
     return { transaction };
 }
@@ -78,3 +105,4 @@ export async function sendMoneyByPhoneNumber(req, res) {
         res.status(400).json({ message: error.message });
     }
 }
+

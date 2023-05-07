@@ -1,4 +1,4 @@
-class TransactionRepository {
+export class TransactionRepository {
     constructor(prisma) { this.prisma = prisma }
 
     async getTransactionByID(id) {
@@ -19,14 +19,9 @@ class TransactionRepository {
         })
     }
 
-    async createTransaction(sender_id, recipient_id, amount) {
+    async createTransaction(newData) {
         return this.prisma.transaction.create({
-            data: {
-                sender_id,
-                recipient_id,
-                amount,
-                status: "COMPLETED",
-            },
+            data: newData,
         });
     }
 }
