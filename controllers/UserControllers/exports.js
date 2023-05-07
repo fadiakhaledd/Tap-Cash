@@ -1,1 +1,2 @@
-export * from "./getUser.js";
+export * from "./getUserByID.js";
+export * from "./getUserByPhone.js";
