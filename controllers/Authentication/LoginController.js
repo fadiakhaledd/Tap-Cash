@@ -5,29 +5,25 @@ import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 export const login = async (req, res, next) => {
     try {
-        const user = await checkUser(req.body.phone, req.body.password);
-        const token = createJWT(user.UID);
-        return res.status(200).json({ userID: user.UID, token: token });
+        const user = await prisma.user.findUnique({
+            where: { phone: req.body.phone },
+        });
 
+        if (user) {
+            const auth = await bcrypt.compare(req.body.password, user.password);
+            if (auth) {
+                const token = createJWT(user.UID);
+                return res.status(200).json({ userID: user.UID, token: token });
+            } else {
+                return res.status(401).json({ message: "Incorrect password" });
+            }
+        } else {
+            return res.status(404).json({ message: "User does not exist" });
+        }
     } catch (error) {
-        //const errors = handleErrors(error);
         res.status(401).json(error.message);
         next(error);
     }
-};
-
-const checkUser = async function (phone, password) {
-    const user = await prisma.user.findUnique({
-        where: { phone: phone },
-    });
-    if (user) {
-        const auth = await bcrypt.compare(password, user.password);
-        if (auth) {
-            return user;
-        } else {
-            throw Error("Incorrect password");
-        }
-    } else throw Error("user does not exist");
 };
 
 const createJWT = (id) => {
