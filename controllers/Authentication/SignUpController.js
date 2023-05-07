@@ -4,7 +4,10 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import fs from 'fs';
 
-const prisma = new PrismaClient();
+import { UserRepository } from '../../Repositories/UserRepository.js'
+
+let prisma = new PrismaClient()
+const userRepository = new UserRepository(prisma);
 
 
 const hashPassword = async function (password) {
@@ -36,9 +39,7 @@ export async function signUp(req, res, next) {
         path = `uploads/NationalIDs/${req.files.image[0].filename}`;
 
         // check if the national ID is registered before
-        const existingNationalID = await prisma.user.findUnique({
-            where: { nationalID: req.body.nationalID },
-        });
+        const existingNationalID = await userRepository.findUserByNationalID(req.body.nationalID);
 
         if (existingNationalID) {
             fs.unlinkSync(path);
@@ -46,9 +47,7 @@ export async function signUp(req, res, next) {
         }
 
         // check if the phone number is registered before
-        const existingPhone = await prisma.user.findUnique({
-            where: { phone: req.body.phone },
-        });
+        const existingPhone = await userRepository.findUserByPhone(req.body.phone);
 
         if (existingPhone) {
             fs.unlinkSync(path);
@@ -57,9 +56,8 @@ export async function signUp(req, res, next) {
 
 
         // check if the username is registered before
-        const existingUsername = await prisma.user.findUnique({
-            where: { username: req.body.username },
-        });
+        const existingUsername = await userRepository.findUserByUsername(req.body.username)
+
         if (existingUsername) {
             fs.unlinkSync(path);
             return res.status(406).json({ message: "Username already registered" })
@@ -83,9 +81,7 @@ export async function signUp(req, res, next) {
             userData.birthdate = dateObject;
 
 
-            const user = await prisma.user.create({
-                data: userData,
-            });
+            const user = await userRepository.createUser(userData);
 
             const token = createJWT(user.id);
 
