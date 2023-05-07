@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import fs from 'fs';
 
-import { UserRepository } from '../../Repositories/UserRepository.js'
+import { UserRepository } from '../../repositories/UserRepository.js'
 
 let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);
