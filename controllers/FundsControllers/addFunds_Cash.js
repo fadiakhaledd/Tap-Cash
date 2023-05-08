@@ -22,6 +22,8 @@ export async function addFundToUser(req, res) {
 
         if (!user) throw new Error("user doesn't exist")
 
+        if (amount <= 0) throw new Error("Amount entered in invalid")
+
         const newBalance = user.balance + amount;
         await userRepository.updateBalance(user.UID, parseFloat(newBalance))
 
