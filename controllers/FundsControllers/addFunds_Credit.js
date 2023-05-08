@@ -50,8 +50,11 @@ function isCreditCardExpired(expiryDate) {
     console.log(month)
     console.log(year)
 
-    const expiration = new Date(expiryDate);
+    const expiration = new Date(year, month - 1);
+    console.log(expiration)
+
     const now = new Date();
+    console.log(now)
     return expiration < now;
 }
 
@@ -59,7 +62,7 @@ export async function addFundToUser(req, res) {
     try {
         const { cardNumber, cvv, expiryDate, userPhoneNumber, amount } = req.body;
 
-        const validCreditCard = validateCreditCardNumber(cardNumber) && validateCVV(cvv) && isCreditCardExpired(expiryDate);
+        const validCreditCard = validateCreditCardNumber(cardNumber) && validateCVV(cvv) && !isCreditCardExpired(expiryDate);
         if (!validCreditCard) throw new Error("Credit Card provided is not valid")
 
         const user = await userRepository.findUserByPhone(userPhoneNumber);
