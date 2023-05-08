@@ -46,16 +46,16 @@ model User {
 model Transaction {
   id           Int               @id @default(autoincrement())
   sender_id    String
-  recipient_id String
+  recipient_id String?
   amount       Float
   status       TransactionStatus
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  fundPayment  PaymentMethod     @default(TRANSFER) // the method that the user will use to add funds 
+  created_at   DateTime          @default(now())
+  updated_at   DateTime          @updatedAt
 
   // Define the sender and recipient fields as references to the User model
-  sender    User @relation("sender_transactions", fields: [sender_id], references: [UID])
-  recipient User @relation("recipient_transactions", fields: [recipient_id], references: [UID])
+  sender    User  @relation("sender_transactions", fields: [sender_id], references: [UID])
+  recipient User? @relation("recipient_transactions", fields: [recipient_id], references: [UID])
 }
 
 enum TransactionStatus {
@@ -63,6 +63,12 @@ enum TransactionStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+enum PaymentMethod {
+  TRANSFER
+  CASH
+  CREDIT_CARD
 }
 
 // Define the TransactionRequest model to be used in requesting money
