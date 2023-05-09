@@ -3,7 +3,7 @@ import * as TransactionServices from "../controllers/TransactionsControllers/exp
 
 const transactionRouter = Router();
 
-transactionRouter.post('/send-by-phone', TransactionServices.sendMoneyByPhoneNumber);
-transactionRouter.post('/send-by-username', TransactionServices.sendMoneyByUsername);
+transactionRouter.post('send-money/phone', TransactionServices.sendMoneyByPhoneNumber);
+transactionRouter.post('send-money/username', TransactionServices.sendMoneyByUsername);
 
 export default transactionRouter; 
