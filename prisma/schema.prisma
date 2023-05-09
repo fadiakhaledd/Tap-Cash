@@ -40,6 +40,9 @@ model User {
 
   // Define the receivedTransactionRequests field as a relation to the TransactionRequest model (requests sent to this user)
   receivedTransactionRequests TransactionRequest[] @relation("recipient_transaction_requests")
+
+  // Define the virtual credit card field
+  VirtualCreditCard VirtualCreditCard?
 }
 
 // Define the Transaction model (send/receive money between users)
@@ -69,6 +72,7 @@ enum PaymentMethod {
   TRANSFER
   CASH
   CREDIT_CARD
+  VCC
 }
 
 // Define the TransactionRequest model to be used in requesting money
@@ -92,4 +96,29 @@ enum TransactionRequestStatus {
   ACCEPTED
   REJECTED
   CANCELLED
+}
+
+// Define the Virtual Credit Card model 
+model VirtualCreditCard {
+  id               Int      @id @default(autoincrement())
+  cardNumber       String   @db.VarChar(19)
+  amount           Float
+  expirationDate   DateTime
+  usedFlag         Boolean  @default(false) // the cvv is only allowed to be used once in a specific period
+  creditCardType   CCTYPE
+  ccHolderName     String
+  verificationCode Int
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [UID])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum CCTYPE {
+  amex
+  jcb
+  mastercard
+  visa
 }
