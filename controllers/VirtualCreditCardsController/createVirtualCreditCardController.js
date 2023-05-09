@@ -8,7 +8,7 @@ let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);
 const vccRepository = new VccRepository(prisma);
 
-export async function getVCC(req, res) {
+export async function createVCC(req, res) {
 
     try {
         const { visa_type, amount, userId } = req.body

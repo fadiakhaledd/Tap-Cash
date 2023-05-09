@@ -4,7 +4,7 @@ import * as VCCServices from "../controllers/VirtualCreditCardsController/export
 
 const VCCRouter = Router();
 
-VCCRouter.post('/generate-vcc', VCCServices.getVCC)
+VCCRouter.post('/generate-vcc', VCCServices.createVCC)
 VCCRouter.post('/use-vcc', VCCServices.useCreditCard)
 
 export default VCCRouter; 
