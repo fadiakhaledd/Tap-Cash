@@ -56,7 +56,7 @@ export async function getVCC(req, res) {
                 cvc = Math.floor(Math.random() * 900) + 100;
             }
             else if (ccType === 'amex' || ccType == 'jcb') {
-                cvc = Math.floor(Math.random() * 900) + 100;
+                cvc = Math.floor(Math.random() * 9000) + 1000;
             }
 
             const VCCData = {
