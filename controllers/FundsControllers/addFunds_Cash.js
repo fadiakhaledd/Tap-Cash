@@ -32,7 +32,8 @@ export async function addFundToUser(req, res) {
             sender_id: user.UID,
             amount: amount,
             status: "COMPLETED",
-            fundPayment: "CASH"
+            paymentMethod: "CASH",
+            transactionType: "ADDING_FUNDS"
         }
 
         const transaction = await transactionRepository.createTransaction(transactionData);

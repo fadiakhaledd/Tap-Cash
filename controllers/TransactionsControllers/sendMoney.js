@@ -29,7 +29,7 @@ export async function sendMoneyByUsername(req, res) {
 
         res.status(201).json({ message: 'Transaction completed successfully', ...result });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 }
 

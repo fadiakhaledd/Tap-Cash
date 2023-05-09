@@ -24,7 +24,10 @@ export class MoneyTransferService {
             recipient_id: recipient.UID,
             amount: amount,
             status: "COMPLETED",
+            paymentMethod: "WALLET",
+            transactionType: "TRANSFER"
         }
+
         const transaction = await this.transactionRepository.createTransaction(transactionData);
 
         return { transaction };
@@ -46,6 +49,8 @@ export class MoneyTransferService {
             recipient_id: recipient.UID,
             amount: amount,
             status: "FAILED",
+            paymentMethod: "WALLET",
+            transactionType: "TRANSFER"
         }
 
         const transaction = await this.transactionRepository.createTransaction(transactionData)
