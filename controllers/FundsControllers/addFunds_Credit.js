@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { UserRepository } from '../../repositories/UserRepository.js'
 import { TransactionRepository } from '../../repositories/TransactionRepository.js'
+import { validateCreditCardInfo } from '../../services/CreditCardServices.js'
 import { compare } from "bcrypt";
 
 let prisma = new PrismaClient()
@@ -47,11 +48,8 @@ function isCreditCardExpired(expiryDate) {
 
     const month = parseInt(expiryDate.substring(0, 2));
     const year = `20${parseInt(expiryDate.substring(3))}`
-    console.log(month)
-    console.log(year)
 
     const expiration = new Date(year, month - 1);
-    console.log(expiration)
 
     const now = new Date();
     console.log(now)
@@ -62,7 +60,7 @@ export async function addFundToUser(req, res) {
     try {
         const { cardNumber, cvv, expiryDate, userPhoneNumber, amount } = req.body;
 
-        const validCreditCard = validateCreditCardNumber(cardNumber) && validateCVV(cvv) && !isCreditCardExpired(expiryDate);
+        const validCreditCard = validateCreditCardInfo(cardNumber, cvv, expiryDate);
         if (!validCreditCard) throw new Error("Credit Card provided is not valid")
 
         const user = await userRepository.findUserByPhone(userPhoneNumber);
