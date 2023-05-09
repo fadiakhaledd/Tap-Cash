@@ -24,7 +24,7 @@ export async function getVCC(req, res) {
         const now = new Date();
 
         // Check if the virtual credit card exists and has not expired yet
-        if (existingVCC && existingVCC.expirationDate > now) {
+        if (existingVCC && existingVCC.expirationDate > now && !existingVCC.usedFlag) {
             return res.status(400).json({ message: "your generated virtual card have not expired yet", 'VCC': existingVCC })
         }
 
@@ -45,6 +45,7 @@ export async function getVCC(req, res) {
 
         // Send a request to an external api to generate a virtual credit card number according to the type chosen by the user
         const apiResponse = await fetchCCData(visa_type)
+        console.log(apiResponse)
 
         // successful response
         if (!apiResponse.isAxiosError) {

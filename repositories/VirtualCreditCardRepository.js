@@ -26,9 +26,12 @@ export class VccRepository {
     }
 
     async updateCreditCard(id, amount, usedFlag) {
-        return this.prisma.user.update({
+        return this.prisma.virtualCreditCard.update({
             where: { id },
-            data: { amount, usedFlag },
+            data: {
+                amount: amount,
+                usedFlag: usedFlag
+            },
         });
     }
 

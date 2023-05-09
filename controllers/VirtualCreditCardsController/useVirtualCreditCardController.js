@@ -56,7 +56,7 @@ export async function useCreditCard(req, res) {
         const newUserBalance = user.balance - amount;
         const moneyInCC = creditCard.amount - amount;
         await userRepository.updateBalance(creditCard.userId, newUserBalance);
-        await vccRepository.updateCreditCard(moneyInCC, true);
+        await vccRepository.updateCreditCard(creditCard.id, moneyInCC, true);
 
         // Create a new transaction record in the database
         const transactionData = {
