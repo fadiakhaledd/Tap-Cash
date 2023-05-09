@@ -101,7 +101,7 @@ enum TransactionRequestStatus {
 // Define the Virtual Credit Card model 
 model VirtualCreditCard {
   id               Int      @id @default(autoincrement())
-  cardNumber       String   @db.VarChar(19)
+  cardNumber       String   @unique @db.VarChar(19)
   amount           Float
   expirationDate   DateTime
   usedFlag         Boolean  @default(false) // the cvv is only allowed to be used once in a specific period

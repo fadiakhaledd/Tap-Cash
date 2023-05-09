@@ -18,4 +18,10 @@ export class VccRepository {
             where: { userId },
         });
     }
+
+    async getCreditCardByCCNumber(cardNumber) {
+        return await this.prisma.virtualCreditCard.findUnique({
+            where: { cardNumber },
+        });
+    }
 }

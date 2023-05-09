@@ -42,9 +42,23 @@ export async function getVCC(req, res) {
         // successful response
         if (!apiResponse.isAxiosError) {
 
+
             const fullname = `${user.firstName} ${user.LastName}`
             const ccnumber = apiResponse.data[0].cardNumber
             const ccType = visa_type.toLowerCase();
+
+
+            // ensures that generated virtual credit card is unique
+            let checkExistingCCNumber;
+            do {
+                checkExistingCCNumber = await vccRepository.getCreditCardByCCNumber(ccnumber);
+
+                if (checkExistingCCNumber) {
+                    apiResponse = await fetchCCData(visa_type);
+                    ccnumber = apiResponse.data[0].cardNumber;
+                    checkExistingCCNumber = await vccRepository.getCreditCardByCCNumber(ccnumber);
+                }
+            } while (checkExistingCCNumber);
 
 
             // Set expiration date to 24 hours from now
