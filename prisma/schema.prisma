@@ -47,14 +47,18 @@ model User {
 
 // Define the Transaction model (send/receive money between users)
 model Transaction {
-  id           Int               @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   sender_id    String
   recipient_id String?
   amount       Float
-  status       TransactionStatus
-  fundPayment  PaymentMethod     @default(TRANSFER) // the method that the user will use to add funds 
-  created_at   DateTime          @default(now())
-  updated_at   DateTime          @updatedAt
+
+  status TransactionStatus
+
+  paymentMethod   PaymentMethod   @default(CASH)
+  transactionType TransactionType @default(TRANSFER)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // Define the sender and recipient fields as references to the User model
   sender    User  @relation("sender_transactions", fields: [sender_id], references: [UID])
@@ -69,10 +73,16 @@ enum TransactionStatus {
 }
 
 enum PaymentMethod {
-  TRANSFER
+  WALLET
   CASH
   CREDIT_CARD
   VCC
+}
+
+enum TransactionType {
+  TRANSFER
+  ONLINE_PAYMENT
+  ADDING_FUNDS
 }
 
 // Define the TransactionRequest model to be used in requesting money
