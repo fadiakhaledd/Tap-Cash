@@ -28,6 +28,12 @@ export async function useCreditCard(req, res) {
             return res.status(422).json({ error: "Invalid credit verification code (CVC)" });
         }
 
+        // Check if the virtual credit card is not expired 
+        const now = new Date()
+        if (creditCard.expirationDate <= now) {
+            return res.status(400).json({ error: "This provided credit card is expired" });
+        }
+
         // Check if the virtual credit card is one-use only
         if (creditCard.usedFlag) {
             return res.status(400).json({ error: "This provided credit card is only one-use" });
