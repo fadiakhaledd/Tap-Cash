@@ -15,7 +15,7 @@ export class MoneyTransferService {
         await this.userRepository.updateBalance(sender.UID, newSenderBalance);
 
         // Add the amount to the recipient's balance
-        let newRecipientBalance = sender.balance + amount;
+        let newRecipientBalance = recipient.balance + amount;
         await this.userRepository.updateBalance(recipient.UID, newRecipientBalance);
 
         // Create a new transaction record in the database
@@ -39,7 +39,7 @@ export class MoneyTransferService {
         await this.userRepository.updateBalance(sender.UID, newSenderBalance)
 
         // Deduct the amount to the recipient's balance
-        let newRecipientBalance = sender.balance - amount;
+        let newRecipientBalance = recipient.balance - amount;
         await this.userRepository.updateBalance(recipient.UID, newRecipientBalance)
 
 
