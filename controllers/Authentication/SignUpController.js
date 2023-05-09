@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { get_info, validateNID } from "./NIDValidation.js";
+import { validateNID } from "../../services/NationalIDServices.js"
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import fs from 'fs';
