@@ -24,4 +24,12 @@ export class VccRepository {
             where: { cardNumber },
         });
     }
+
+    async updateCreditCard(id, amount, usedFlag) {
+        return this.prisma.user.update({
+            where: { id },
+            data: { amount, usedFlag },
+        });
+    }
+
 }
