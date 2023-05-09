@@ -1,3 +1,26 @@
+import axios from "axios";
+
+
+// send a request to an api that generate a credit card number 
+export const fetchCCData = async (creditCardType) => {
+    const url = `https://fake-credit-card-number-generator-api.p.rapidapi.com/creditcard-cardgenerate/${creditCardType}`;
+    const options = {
+        method: 'GET',
+        url: url,
+        headers: {
+            'X-RapidAPI-Key': process.env.XRapidAPIKey,
+            'X-RapidAPI-Host': process.env.XRapidAPIHost
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
 // validate a credit card info provided from the user 
 export function validateCreditCardInfo(cardNumber, cvv, expiryDate) {
     return (validateCreditCardNumber(cardNumber) && validateCVV(cvv) && !isCreditCardExpired(expiryDate));
