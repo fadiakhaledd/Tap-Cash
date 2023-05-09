@@ -18,12 +18,12 @@ export class UserRepository {
                 balance: true,
                 nationalID: true,
                 nationalIdFileName: true,
-                sentTransactions: true,
-                receivedTransactions: true,
-                sentTransactionRequests: true,
-                receivedTransactionRequests: true,
+                // sentTransactions: true,
+                // receivedTransactions: true,
+                // sentTransactionRequests: true,
+                // receivedTransactionRequests: true,
+                // VirtualCreditCard: true,
                 password: false
-
             }
         });
     }
