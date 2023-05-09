@@ -13,13 +13,11 @@ export async function getVCC(req, res) {
     try {
         const { visa_type, amount, userId } = req.body
 
-        // Check the user's existance
+        // Check if the user exists
         const user = await userRepository.findUserByID(userId);
-
         if (!user) {
             return res.status(400).json({ error: "User ID doesn't exist" })
         }
-
 
         // Check if the provided user already has a credit card and check its expiration date 
         const existingVCC = await vccRepository.getCreditCardByUser(userId)
@@ -29,11 +27,11 @@ export async function getVCC(req, res) {
         if (existingVCC && existingVCC.expirationDate > now) {
             return res.status(400).json({ message: "your generated virtual card have not expired yet", 'VCC': existingVCC })
         }
-        // If the virtual credit card exists but has already expired
-        else if (existingVCC && existingVCC.expirationDate <= now) {
+
+        // Check if the virtual credit card exists but has already expired or has been used once
+        else if (existingVCC && (existingVCC.expirationDate <= now || existingVCC.usedFlag)) {
             await vccRepository.deleteVCC(existingVCC.id)
         }
-
 
         // validate the amount entered from the request
         if (amount < 0) {
