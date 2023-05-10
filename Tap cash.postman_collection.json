@@ -1,0 +1,590 @@
+{
+	"info": {
+		"_postman_id": "6c713b8b-bed1-4954-ac54-1b0b25312926",
+		"name": "Tap cash",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24950792",
+		"_collection_link": "https://tapcash.postman.co/workspace/New-Team-Workspace~a188aa6f-adfc-4f6e-9b38-0dd7033baa0c/collection/24950792-6c713b8b-bed1-4954-ac54-1b0b25312926?action=share&creator=24950792&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "auth/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstName",
+									"value": "ahmed",
+									"type": "text"
+								},
+								{
+									"key": "LastName",
+									"value": "ahmed123",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "01144474054",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "kotta@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "neww",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								},
+								{
+									"key": "birthdate",
+									"value": "2001-6-8",
+									"type": "text"
+								},
+								{
+									"key": "nationalID",
+									"value": "30303072100929",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/Downloads/h-Page-1.drawio (3).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/auth/register",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auth/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"phone\": \"01144474054\", \r\n\"password\" : \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/auth/login",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Endpoints",
+			"item": [
+				{
+					"name": "/users/id/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/users/id/1f5d0788-d219-45ee-8484-7fa76905ea79",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"id",
+								"1f5d0788-d219-45ee-8484-7fa76905ea79"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/phone/:phone",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/users/phone/01144474054",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"phone",
+								"01144474054"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:userId/money-spent",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/users/a884f012-88c3-4a7e-8e90-6c4ef196af7b/money-spent",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"a884f012-88c3-4a7e-8e90-6c4ef196af7b",
+								"money-spent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:userId/virtual-credit-card",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/users/a884f012-88c3-4a7e-8e90-6c4ef196af7b/virtual-credit-card",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"a884f012-88c3-4a7e-8e90-6c4ef196af7b",
+								"virtual-credit-card"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:userId/transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/users/a884f012-88c3-4a7e-8e90-6c4ef196af7b/transactions",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"a884f012-88c3-4a7e-8e90-6c4ef196af7b",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "/transactions/send-money/phone",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"senderId\":\"b4b0a4f6-dd22-49d8-9f2a-f12068ed52ee\" ,\r\n    \"recipientPhone\":\"01144474054\" ,\r\n    \"amount\": 23\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/transactions/send-money/phone",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"transactions",
+								"send-money",
+								"phone"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/transactions/send-money/username",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"senderId\":\"1f5d0788-d219-45ee-8484-7fa76905ea79\",\r\n    \"recipientUsername\":\"ahmed123\" ,\r\n    \"amount\": 29\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/transactions/send-money/username",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"transactions",
+								"send-money",
+								"username"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Funds",
+			"item": [
+				{
+					"name": "funds/cash/service-code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/funds/cash/service-code",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"funds",
+								"cash",
+								"service-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "funds/cash/add-funds",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userPhoneNumber\" : \"01144474054\",\r\n    \"amount\" : 3000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/funds/cash/add-funds",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"funds",
+								"cash",
+								"add-funds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "funds/credit/add-funds",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardNumber\":\"5190014200145506\",\r\n    \"cvv\":\"0871\", \r\n    \"expiryDate\":\"05/20\", \r\n    \"userPhoneNumber\": \"01144474054\",\r\n    \"amount\" : 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/funds/credit/add-funds",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"funds",
+								"credit",
+								"add-funds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/funds/cash/add-funds",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userPhoneNumber\" : \"01144474054\",\r\n    \"amount\" : 3000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/funds/cash/add-funds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"funds",
+								"cash",
+								"add-funds"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Virtual Credit Card",
+			"item": [
+				{
+					"name": "/VCC/use-vcc",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"creditCardNumber\" :\"3454125551991805\", \r\n    \"cvc\": 9997, \r\n    \"amount\": 1000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/VCC/use-vcc",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"VCC",
+								"use-vcc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/VCC/generate-vcc",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"visa_type\": \"amex\", \r\n    \"amount\" : 100, \r\n    \"userId\":\"b4b0a4f6-dd22-49d8-9f2a-f12068ed52ee\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/VCC/generate-vcc",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"VCC",
+								"generate-vcc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subaccounts",
+			"item": [
+				{
+					"name": "/subaccounts/",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"LastName\": \"Doe\",\r\n  \"phone\": \"01144474054\",\r\n  \"password\": \"123456\",\r\n  \"username\": \"johndoee\",\r\n  \"email\": \"johndoe@example.com\",\r\n  \"balance\": 156,\r\n  \"spendingLimit\": 60,\r\n  \"spendingCategories\": [\"food\", \"entertainment\"],\r\n  \"monthlyLimit\": 100,\r\n  \"transactionLimit\": 50.00,\r\n  \"ownerID\": \"c9a5ad3e-5cb2-47a9-832a-8e04ebe4660a\",\r\n  \"birthdate\": \"2003-05-06\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tap-cash.onrender.com/subaccounts/",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"subaccounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/subaccounts/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/subaccounts/81d83e6d-6a40-4455-af94-a7ba091aa976",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"subaccounts",
+								"81d83e6d-6a40-4455-af94-a7ba091aa976"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/subaccounts/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://tap-cash.onrender.com/subaccounts/81d83e6d-6a40-4455-af94-a7ba091aa976",
+							"protocol": "https",
+							"host": [
+								"tap-cash",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"subaccounts",
+								"81d83e6d-6a40-4455-af94-a7ba091aa976"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODMyMjk0NzQsImV4cCI6MTY4MzIzMDY3NH0.gbEzWVHYN1Lm13FdyWynJ9dXvIbtdhYGwm9ejeYIil8",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
