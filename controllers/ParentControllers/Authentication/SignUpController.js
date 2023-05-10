@@ -1,13 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import { validateNID } from "../../../services/NationalIDServices.js"
 import { hashPassword, createJWT } from '../../../helpers.js'
+
 import fs from 'fs';
 
 import { UserRepository } from '../../../repositories/UserRepository.js'
+import { SubaccountRepository } from '../../../repositories/SubaccountRepository.js'
+
 
 let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);
-
+const subaccountRepository = new SubaccountRepository(prisma);
 
 export async function signUp(req, res, next) {
 
@@ -32,21 +35,20 @@ export async function signUp(req, res, next) {
         }
 
         // check if the phone number is registered before
-        const existingPhone = await userRepository.findUserByPhone(req.body.phone);
-
-        if (existingPhone) {
-            fs.unlinkSync(path);
-            return res.status(406).json({ message: "Phone number already registered" })
+        const existingPhoneFromSubaccounts = await subaccountRepository.getSubaccountByPhone(req.body.phone);
+        const existingPhoneFromUsers = await userRepository.findUserByPhone(req.body.phone)
+        if (existingPhoneFromSubaccounts || existingPhoneFromUsers) {
+            return res.status(406).json({ error: "Phone number already registered" })
         }
 
+        // check if the phone number is registered before
+        const existingUsernameFromSubaccounts = await subaccountRepository.getSubaccountByPhone(req.body.username);
+        const existingUsernameFromUsers = await userRepository.findUserByUsername(req.body.username)
 
-        // check if the username is registered before
-        const existingUsername = await userRepository.findUserByUsername(req.body.username)
-
-        if (existingUsername) {
-            fs.unlinkSync(path);
-            return res.status(406).json({ message: "Username already registered" })
+        if (existingUsernameFromSubaccounts || existingUsernameFromUsers) {
+            return res.status(406).json({ error: "Username already registered" })
         }
+        fs.unlinkSync(path);
 
         // validate the entered national id if all the previous checks passed 
         if (validateNID(req.body.nationalID)) {
