@@ -36,10 +36,10 @@ model User {
   receivedTransactions Transaction[] @relation("recipient_transactions")
 
   // Define the sentTransactionRequests field as a relation to the TransactionRequest model (requests done by this user)
-  sentTransactionRequests TransactionRequest[] @relation("requester_transaction_requests")
+  sentTransactionRequests Transaction[] @relation("requester_transaction_requests")
 
   // Define the receivedTransactionRequests field as a relation to the TransactionRequest model (requests sent to this user)
-  receivedTransactionRequests TransactionRequest[] @relation("recipient_transaction_requests")
+  receivedTransactionRequests Transaction[] @relation("recipient_transaction_requests")
 
   // Define the virtual credit card field
   VirtualCreditCard VirtualCreditCard?
@@ -62,9 +62,9 @@ model Transaction {
   updated_at DateTime @updatedAt
 
   // Define the sender and recipient fields as references to the User model
-  sender_id    String
+  sender_id    String?
   recipient_id String?
-  sender       User    @relation("sender_transactions", fields: [sender_id], references: [UID])
+  sender       User?   @relation("sender_transactions", fields: [sender_id], references: [UID])
   recipient    User?   @relation("recipient_transactions", fields: [recipient_id], references: [UID])
 
   // Define the sender and recipient fields as references to the subaccount model
@@ -75,6 +75,12 @@ model Transaction {
 
   // Add a new field to indicate whether the transaction is a parent or child transaction
   transactionLevel TransactionLevel @default(PARENT)
+
+  // Define the requester and recipient fields as references to the User model
+  requester_id String?
+  reciever_id  String?
+  requester    User?   @relation("requester_transaction_requests", fields: [requester_id], references: [UID])
+  reciever     User?   @relation("recipient_transaction_requests", fields: [reciever_id], references: [UID])
 }
 
 enum TransactionLevel {
@@ -86,6 +92,8 @@ enum TransactionStatus {
   PENDING
   COMPLETED
   FAILED
+  ACCEPTED
+  REJECTED
   CANCELLED
 }
 
@@ -97,33 +105,11 @@ enum PaymentMethod {
 }
 
 enum TransactionType {
+  REQUEST
   TRANSFER
   FUND_SUBACCOUNT
   ONLINE_PAYMENT
   ADDING_FUNDS
-}
-
-// Define the TransactionRequest model to be used in requesting money
-model TransactionRequest {
-  id           Int                      @id @default(autoincrement())
-  requester_id String
-  recipient_id String
-  amount       Float
-  status       TransactionRequestStatus
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  // Define the requester and recipient fields as references to the User model
-  requester User @relation("requester_transaction_requests", fields: [requester_id], references: [UID])
-  recipient User @relation("recipient_transaction_requests", fields: [recipient_id], references: [UID])
-}
-
-enum TransactionRequestStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-  CANCELLED
 }
 
 // Define the Virtual Credit Card model 
@@ -161,10 +147,9 @@ model Subaccount {
   username  String @unique @db.VarChar(20)
   email     String @db.VarChar(50)
 
-  balance        Float   @default(0)
+  spendingLimit  Float   @default(0)
   profilePicture String?
 
-  spendingLimit      Float
   spendingCategories String[]
 
   dailyLimit       Float?

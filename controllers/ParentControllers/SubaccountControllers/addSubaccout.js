@@ -50,21 +50,21 @@ export async function addSubaccount(req, res) {
 
 
         // if the subaccount owner entered an initial balance for the subaccount
-        if (subaccountData.balance > 0) {
+        if (subaccountData.spendingLimit > 0) {
 
             // deduct the owner's balance with the balance assigned to the subaccount
             const owner = await userRepository.findUserByID(subaccountData.ownerID);
-            if (owner.balance < subaccountData.balance) {
+            if (owner.balance < subaccountData.spendingLimit) {
                 return res.status(400).json({ error: "Insufficient balance" })
             }
-            const newOwnerBalance = owner.balance - subaccountData.balance;
+            const newOwnerBalance = owner.balance - subaccountData.spendingLimit;
             await userRepository.updateBalance(owner.UID, newOwnerBalance);
 
             //create a new transaction to save the transaction done between parent and child
             let transactionData = {
                 sender_id: subaccountData.ownerID,
                 recipientSubaccountUID: newSubaccount.id,
-                amount: subaccountData.balance,
+                amount: subaccountData.spendingLimit,
                 status: "COMPLETED",
                 paymentMethod: "WALLET",
                 transactionType: "FUND_SUBACCOUNT"

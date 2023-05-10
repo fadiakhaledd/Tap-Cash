@@ -52,9 +52,7 @@ export class SubaccountRepository {
     async updateSubaccount(subaccountID, updates) {
         const updatedSubaccount = await this.prisma.subaccount.update({
             where: { id: subaccountID },
-            data: {
-                ...updates
-            }
+            data: updates
         })
         return updatedSubaccount
     }
