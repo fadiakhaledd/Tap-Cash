@@ -12,7 +12,7 @@ export class SubaccountRepository {
     }
 
     async getSubaccountByID(id) {
-        const subaccount = await this.this.prisma.subaccount.findUnique({
+        const subaccount = await this.prisma.subaccount.findUnique({
             where: { id },
             include: {
                 owner: true,
@@ -61,7 +61,7 @@ export class SubaccountRepository {
 
     async deleteSubaccount(subaccountID) {
         const deletedSubaccount = await this.prisma.subaccount.delete({
-            where: { id: subaccountUID }
+            where: { id: subaccountID }
         })
     }
 }

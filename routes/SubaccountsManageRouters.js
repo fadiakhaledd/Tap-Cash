@@ -4,6 +4,9 @@ import * as SubaccountServices from "../controllers/ParentControllers/Subaccount
 const subaccountRouter = Router();
 
 subaccountRouter.post('/', SubaccountServices.addSubaccount);
+subaccountRouter.get('/:id', SubaccountServices.getSubaccount);
+subaccountRouter.delete('/:id', SubaccountServices.deleteSubaccount);
+
 
 
 export default subaccountRouter; 
