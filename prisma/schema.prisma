@@ -98,6 +98,7 @@ enum PaymentMethod {
 
 enum TransactionType {
   TRANSFER
+  FUND_SUBACCOUNT
   ONLINE_PAYMENT
   ADDING_FUNDS
 }
@@ -170,6 +171,8 @@ model Subaccount {
   dailyLimit       Float?
   monthlyLimit     Float?
   transactionLimit Float?
+
+  birthdate DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
