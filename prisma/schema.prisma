@@ -70,8 +70,8 @@ model Transaction {
   // Define the sender and recipient fields as references to the subaccount model
   senderSubaccountUID    String?
   recipientSubaccountUID String?
-  senderSubaccount       Subaccount? @relation("sender_transactions", fields: [senderSubaccountUID], references: [UID])
-  recipientSubaccount    Subaccount? @relation("recipient_transactions", fields: [recipientSubaccountUID], references: [UID])
+  senderSubaccount       Subaccount? @relation("sender_transactions", fields: [senderSubaccountUID], references: [id])
+  recipientSubaccount    Subaccount? @relation("recipient_transactions", fields: [recipientSubaccountUID], references: [id])
 
   // Add a new field to indicate whether the transaction is a parent or child transaction
   transactionLevel TransactionLevel @default(PARENT)
@@ -152,7 +152,7 @@ enum CCTYPE {
 
 // define the sub account mode
 model Subaccount {
-  UID        String @id @default(uuid())
+  id         String @id @default(uuid())
   firstName  String @db.VarChar(50)
   LastName   String @db.VarChar(50)
   phone      String @unique @db.VarChar(20)
