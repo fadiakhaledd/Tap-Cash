@@ -17,7 +17,8 @@ const transactionRepository = new TransactionRepository(prisma);
 // add subaccount for the user and add it as an account that can log in later
 export async function addSubaccount(req, res) {
 
-    try {  // check if the phone number is registered before
+    try {
+        // check if the phone number is registered before
         const existingPhoneFromSubaccounts = await subaccountRepository.getSubaccountByPhone(req.body.phone);
         const existingPhoneFromUsers = await userRepository.findUserByPhone(req.body.phone)
         if (existingPhoneFromSubaccounts || existingPhoneFromUsers) {
@@ -32,48 +33,47 @@ export async function addSubaccount(req, res) {
             return res.status(406).json({ error: "Username already registered" })
         }
 
-        if (validateNID(req.body.nationalID)) {
+        // extract the data from the body
+        let subaccountData = req.body;
 
-            let subaccountData = req.body;
+        // hashing the password 
+        const hashedPassword = await hashPassword(subaccountData.password);
+        subaccountData.password = hashedPassword;
 
-            // hashing the password 
-            const hashedPassword = await hashPassword(subaccountData.password);
-            subaccountData.password = hashedPassword;
-
-            const dateObject = new Date(req.body.birthdate);
-            dateObject.setHours(0, 0, 0, 0); // set time component to midnight
-            subaccountData.birthdate = dateObject;
-
-
-            const newSubaccount = await subaccountRepository.createSubaccount(subaccountData)
-            const token = createJWT(newSubaccount.id);
+        const dateObject = new Date(req.body.birthdate);
+        dateObject.setHours(0, 0, 0, 0); // set time component to midnight
+        subaccountData.birthdate = dateObject;
 
 
-            // if the subaccount owner entered an initial balance for the subaccount
-            if (subaccountData.balance > 0) {
+        const newSubaccount = await subaccountRepository.createSubaccount(subaccountData)
+        const token = createJWT(newSubaccount.id);
 
-                // deduct the owner's balance with the balance assigned to the subaccount
-                const owner = await userRepository.findUserByID(subaccountData.ownerID);
-                if (owner.balance < subaccountData.balance) {
-                    return res.status(400).json({ error: "Insufficient balance" })
-                }
-                const newOwnerBalance = owner.balance - subaccountData.balance;
-                await userRepository.updateBalance(owner.UID, newOwnerBalance);
 
-                //create a new transaction to save the transaction done between parent and child
-                let transactionData = {
-                    sender_id: subaccountData.ownerID,
-                    recipientSubaccountUID: newSubaccount.id,
-                    amount: subaccountData.balance,
-                    status: "COMPLETED",
-                    paymentMethod: "WALLET",
-                    transactionType: "FUND_SUBACCOUNT"
-                }
+        // if the subaccount owner entered an initial balance for the subaccount
+        if (subaccountData.balance > 0) {
 
-                const transaction = await transactionRepository.createTransaction(transactionData);
+            // deduct the owner's balance with the balance assigned to the subaccount
+            const owner = await userRepository.findUserByID(subaccountData.ownerID);
+            if (owner.balance < subaccountData.balance) {
+                return res.status(400).json({ error: "Insufficient balance" })
             }
-            return res.status(201).json({ 'subaccount': newSubaccount })
+            const newOwnerBalance = owner.balance - subaccountData.balance;
+            await userRepository.updateBalance(owner.UID, newOwnerBalance);
+
+            //create a new transaction to save the transaction done between parent and child
+            let transactionData = {
+                sender_id: subaccountData.ownerID,
+                recipientSubaccountUID: newSubaccount.id,
+                amount: subaccountData.balance,
+                status: "COMPLETED",
+                paymentMethod: "WALLET",
+                transactionType: "FUND_SUBACCOUNT"
+            }
+
+            const transaction = await transactionRepository.createTransaction(transactionData);
         }
+        return res.status(201).json({ 'subaccount': newSubaccount })
+
     } catch (error) {
         return res.status(500).json({ error: error.message })
     }

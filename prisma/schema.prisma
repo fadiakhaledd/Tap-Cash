@@ -153,14 +153,13 @@ enum CCTYPE {
 
 // define the sub account mode
 model Subaccount {
-  id         String @id @default(uuid())
-  firstName  String @db.VarChar(50)
-  LastName   String @db.VarChar(50)
-  phone      String @unique @db.VarChar(20)
-  password   String
-  username   String @unique @db.VarChar(20)
-  email      String @db.VarChar(50)
-  nationalID String @unique @db.VarChar(15)
+  id        String @id @default(uuid())
+  firstName String @db.VarChar(50)
+  LastName  String @db.VarChar(50)
+  phone     String @unique @db.VarChar(20)
+  password  String
+  username  String @unique @db.VarChar(20)
+  email     String @db.VarChar(50)
 
   balance        Float   @default(0)
   profilePicture String?
