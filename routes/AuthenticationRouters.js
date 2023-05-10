@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from 'multer';
 import path from 'path'
-import * as AuthenticationService from "../controllers/Authentication/exports.js"
+import * as AuthenticationService from "../controllers/ParentControllers/Authentication/exports.js"
 
 
 const AuthRouter = Router();

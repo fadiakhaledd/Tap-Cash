@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { validateNID } from "../../services/NationalIDServices.js"
+import { validateNID } from "../../../services/NationalIDServices.js"
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import fs from 'fs';
 
-import { UserRepository } from '../../repositories/UserRepository.js'
+import { UserRepository } from '../../../repositories/UserRepository.js'
 
 let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);

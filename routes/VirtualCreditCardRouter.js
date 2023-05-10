@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as VCCServices from "../controllers/VirtualCreditCardsController/exports.js"
+import * as VCCServices from "../controllers/ParentControllers/VirtualCreditCardsController/exports.js"
 
 
 const VCCRouter = Router();

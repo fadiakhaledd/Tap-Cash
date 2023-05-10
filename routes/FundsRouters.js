@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as FundServices from "../controllers/FundsControllers/exports.js"
+import * as FundServices from "../controllers/ParentControllers/FundsControllers/exports.js"
 
 const fundRouter = Router();
 

@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { UserRepository } from '../../repositories/UserRepository.js';
-import { TransactionRepository } from '../../repositories/TransactionRepository.js';
-import { VccRepository } from '../../repositories/VirtualCreditCardRepository.js';
+import { UserRepository } from '../../../repositories/UserRepository.js';
+import { TransactionRepository } from '../../../repositories/TransactionRepository.js';
+import { VccRepository } from '../../../repositories/VirtualCreditCardRepository.js';
 
 const prisma = new PrismaClient();
 const userRepository = new UserRepository(prisma);

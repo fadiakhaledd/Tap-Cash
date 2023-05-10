@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { UserRepository } from '../../repositories/UserRepository.js'
+import { UserRepository } from '../../../repositories/UserRepository.js'
 
 let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);

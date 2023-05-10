@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { UserRepository } from '../../repositories/UserRepository.js'
-import { VccRepository } from '../../repositories/VirtualCreditCardRepository.js'
+import { UserRepository } from '../../../repositories/UserRepository.js'
+import { VccRepository } from '../../../repositories/VirtualCreditCardRepository.js'
 
-import { fetchCCData } from '../../services/CreditCardServices.js'
+import { fetchCCData } from '../../../services/CreditCardServices.js'
 
 let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);
