@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { validateNID } from "../../../services/NationalIDServices.js"
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import { hashPassword, createJWT } from '../../../helpers.js'
 import fs from 'fs';
 
 import { UserRepository } from '../../../repositories/UserRepository.js'
@@ -9,20 +8,6 @@ import { UserRepository } from '../../../repositories/UserRepository.js'
 let prisma = new PrismaClient()
 const userRepository = new UserRepository(prisma);
 
-
-const hashPassword = async function (password) {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
-};
-
-
-const createJWT = (id) => {
-    const jwtExpirySeconds = 20 * 60; //jwt expires after 20 minutes
-    return jwt.sign({ id }, process.env.JWT_KEY, {
-        expiresIn: jwtExpirySeconds,
-    });
-};
 
 export async function signUp(req, res, next) {
 

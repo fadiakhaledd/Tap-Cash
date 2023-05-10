@@ -10,6 +10,7 @@ import userRouter from "./routes/UserRouters.js"
 import transactionRouter from "./routes/TransactionRouters.js"
 import fundRouter from "./routes/FundsRouters.js"
 import VCCRouter from "./routes/VirtualCreditCardRouter.js"
+import subaccountRouter from "./routes/SubaccountsManageRouters.js"
 
 
 
@@ -19,6 +20,7 @@ app.use('/users', userRouter);
 app.use('/transactions', transactionRouter);
 app.use('/funds', fundRouter)
 app.use('/VCC', VCCRouter)
+app.use('/subaccounts', subaccountRouter)
 
 
 // Start the server and listen on the specified port
