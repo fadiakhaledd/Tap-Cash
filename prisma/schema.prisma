@@ -43,14 +43,15 @@ model User {
 
   // Define the virtual credit card field
   VirtualCreditCard VirtualCreditCard?
+
+  // Define the linked Subaccounts 
+  subaccounts Subaccount[]
 }
 
 // Define the Transaction model (send/receive money between users)
 model Transaction {
-  id           Int     @id @default(autoincrement())
-  sender_id    String
-  recipient_id String?
-  amount       Float
+  id     Int   @id @default(autoincrement())
+  amount Float
 
   status TransactionStatus
 
@@ -61,8 +62,24 @@ model Transaction {
   updated_at DateTime @updatedAt
 
   // Define the sender and recipient fields as references to the User model
-  sender    User  @relation("sender_transactions", fields: [sender_id], references: [UID])
-  recipient User? @relation("recipient_transactions", fields: [recipient_id], references: [UID])
+  sender_id    String
+  recipient_id String?
+  sender       User    @relation("sender_transactions", fields: [sender_id], references: [UID])
+  recipient    User?   @relation("recipient_transactions", fields: [recipient_id], references: [UID])
+
+  // Define the sender and recipient fields as references to the subaccount model
+  senderSubaccountUID    String?
+  recipientSubaccountUID String?
+  senderSubaccount       Subaccount? @relation("sender_transactions", fields: [senderSubaccountUID], references: [UID])
+  recipientSubaccount    Subaccount? @relation("recipient_transactions", fields: [recipientSubaccountUID], references: [UID])
+
+  // Add a new field to indicate whether the transaction is a parent or child transaction
+  transactionLevel TransactionLevel @default(PARENT)
+}
+
+enum TransactionLevel {
+  PARENT
+  CHILD
 }
 
 enum TransactionStatus {
@@ -134,4 +151,35 @@ enum CCTYPE {
 }
 
 // define the sub account mode
-model 
+model Subaccount {
+  UID        String @id @default(uuid())
+  firstName  String @db.VarChar(50)
+  LastName   String @db.VarChar(50)
+  phone      String @unique @db.VarChar(20)
+  password   String
+  username   String @unique @db.VarChar(20)
+  email      String @db.VarChar(50)
+  nationalID String @unique @db.VarChar(15)
+
+  balance        Float   @default(0)
+  profilePicture String?
+
+  spendingLimit      Float
+  spendingCategories String[]
+
+  dailyLimit       Float?
+  monthlyLimit     Float?
+  transactionLimit Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerID], references: [UID])
+  ownerID String
+
+  // Define the sentTransactions field as a relation to the Transaction model
+  sentTransactions Transaction[] @relation("sender_transactions")
+
+  // Define the receivedTransactions field as a relation to the Transaction model
+  receivedTransactions Transaction[] @relation("recipient_transactions")
+}
