@@ -33,17 +33,32 @@ export class MoneyTransferService {
         return { transaction };
     }
 
-    async returnMoney(requester, reciever, amount) {
-
+    async returnMoney(sender, recipient, amount) {
         // Add the amount from the sender's balance
-        let newSenderBalance = requester.balance + amount;
-        await this.userRepository.updateBalance(requester.UID, newSenderBalance)
+        let newSenderBalance = sender.balance + amount;
+        await this.userRepository.updateBalance(sender.UID, newSenderBalance)
 
         // Deduct the amount to the recipient's balance
-        let newRecipientBalance = reciever.balance - amount;
-        await this.userRepository.updateBalance(reciever.UID, newRecipientBalance)
+        let newRecipientBalance = recipient.balance - amount;
+        await this.userRepository.updateBalance(recipient.UID, newRecipientBalance)
 
 
+        // Create a new transaction record in the database
+        let transactionData = {
+            sender_id: sender.UID,
+            recipient_id: recipient.UID,
+            amount: amount,
+            status: "FAILED",
+            paymentMethod: "WALLET",
+            transactionType: "TRANSFER"
+        }
+
+        const transaction = await this.transactionRepository.createTransaction(transactionData)
+
+        return { transaction };
+    }
+
+    async requestMoney(requester, reciever, amount) {
         // Create a new transaction record in the database
         let transactionData = {
             requester_id: requester.UID,
@@ -53,14 +68,8 @@ export class MoneyTransferService {
             paymentMethod: "WALLET",
             transactionType: "REQUEST"
         }
-
-        const transaction = await this.transactionRepository.createTransaction(transactionData)
-
-        return { transaction };
-    }
-
-    async requestMoney(sender, recipient, amount) {
-
+        const transaction = await this.transactionRepository.createTransaction(transactionData);
+        return { transaction }
 
     }
 

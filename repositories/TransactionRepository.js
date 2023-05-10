@@ -19,6 +19,20 @@ export class TransactionRepository {
         })
     }
 
+
+    async getTransactionByRequesterID(requester_id) {
+        return this.prisma.transaction.findMany({
+            where: { requester: { UID: requester_id } },
+        })
+    }
+
+
+    async getTransactionByRecieverID(reciever_id) {
+        return this.prisma.transaction.findMany({
+            where: { reciever: { UID: reciever_id } },
+        })
+    }
+
     async createTransaction(newData) {
         return this.prisma.transaction.create({
             data: newData,

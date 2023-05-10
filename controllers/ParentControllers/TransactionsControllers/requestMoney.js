@@ -10,18 +10,18 @@ const moneyTransferService = new MoneyTransferService(userRepository, transactio
 
 export async function requestMoneyByPhoneNumber(req, res) {
     try {
-        const { senderId, recipientPhone, amount } = req.body;
+        const { requesterId, recieverPhone, amount } = req.body;
 
         // Retrieve sender and recipient users from the database
-        const sender = await userRepository.findUserByID(senderId);
-        const recipient = await userRepository.findUserByPhone(recipientPhone);
+        const requester = await userRepository.findUserByID(requesterId);
+        const reciever = await userRepository.findUserByPhone(recieverPhone);
 
 
-        if (!sender) throw new Error('Sender ID is incorrect');
-        if (!recipient) throw new Error('Recipient phone number is not registered');
-        if (sender === recipient) throw new Error('sender and recipient are the same user')
+        if (!requester) throw new Error('Sender ID is incorrect');
+        if (!reciever) throw new Error('reciever phone number is not registered');
+        if (requester === reciever) throw new Error('sender and recipient are the same user')
 
-        const result = await moneyTransferService.requestMoney(sender, recipient, amount);
+        const result = await moneyTransferService.requestMoney(requester, reciever, amount);
 
         res.status(201).json({ message: 'Your request is sent successfully', ...result });
     } catch (error) {

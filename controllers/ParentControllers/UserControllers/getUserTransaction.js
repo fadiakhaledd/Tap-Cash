@@ -18,10 +18,15 @@ export async function getTransactions(req, res) {
 
         const sent = await transactionRepository.getTransactionBySenderID(userId);
         const recieved = await transactionRepository.getTransactionByRecipientID(userId);
+        const requested = await transactionRepository.getTransactionByRequesterID(userId);
+        const recievedRequests = await transactionRepository.getTransactionByRecieverID(userId);
+
 
         const transactionsData = {
             sentMoneyTransactions: sent,
-            recievedMoneyTransactions: recieved
+            recievedMoneyTransactions: recieved,
+            sentRequests: requested,
+            recievedRequests: recievedRequests
         }
 
 
